@@ -7,7 +7,7 @@ We mapped Lexington collision data provided by [Lexington’s Open Data Portal](
 ![alt text](https://github.com/kelly-sovacool/geo109-project/blob/master/visuals/histogram.png)
 ![alt text](https://github.com/kelly-sovacool/geo109-project/blob/master/visuals/barplot.png)
 
-Interactive versions are available as html files.
+Interactive versions are available as html files (see `visuals/`).
 
 ## Maps
 
@@ -15,3 +15,5 @@ Interactive versions are available as html files.
 ![alt text](https://github.com/kelly-sovacool/geo109-project/blob/master/visuals/map2_draft1_bike_collisions.png)
 
 ### Authors: Kelly Sovacool and Geoff Hill
+
+Undergraduate students at the University of Kentucky.
