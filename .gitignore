@@ -1,0 +1,8 @@
+.snakemake/
+.idea/
+*.DS_Store
+Icon*
+~$*
+*.qgs~
+*.docx
+*.gdoc
