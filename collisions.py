@@ -9,7 +9,7 @@ Usage:
 
 Options:
     -h --help       Display this message
-    -f --Filter     Filter out fatal & bicycle collisions and write to new geojson files
+    -f --filter     Filter out fatal & bicycle collisions and write to new geojson files
     -p --plot       Plot a histogram and barplot
 """
 import collections
@@ -19,7 +19,7 @@ import json
 import plotly
 
 def main(args):
-    """ Loads geojson data and calls filter or plot function.
+    """ Loads the geojson data downloaded from the UK mapshop and calls the filter and/or plot function.
     If neither flag is included, does absolutely nothing.
     :param args: dictionary from docopt argument parser
     """
@@ -31,7 +31,7 @@ def main(args):
         plot(collisions)
 
 def filter(collisions):
-    """ Filter fatal collisions and collisions involving a bicycle. Write to separate geojson files.
+    """ Filters fatal collisions and collisions involving a bicycle. Writes them to separate geojson files.
     :param collisions: dictionary loaded from geojson file.
     :return: None.
     """
