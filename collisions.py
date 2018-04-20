@@ -8,9 +8,9 @@ Usage:
     ./collisions.py <geojson_filename> [--filter] [--plot]
 
 Options:
-    -h --help       Display this messages
-    -f --Filter     Filter fatal & bicycle collisions & write to new files
-    -p --plot       Plot a hitogram and barplot
+    -h --help       Display this message
+    -f --Filter     Filter out fatal & bicycle collisions and write to new geojson files
+    -p --plot       Plot a histogram and barplot
 """
 import collections
 import datetime
@@ -19,6 +19,10 @@ import json
 import plotly
 
 def main(args):
+    """ Loads geojson data and calls filter or plot function.
+    If neither flag is included, does absolutely nothing.
+    :param args: dictionary from docopt argument parser
+    """
     with open(args['<geojson_filename>'], 'r') as file:
         collisions = json.load(file)
     if args['--filter']:
@@ -27,6 +31,10 @@ def main(args):
         plot(collisions)
 
 def filter(collisions):
+    """ Filter fatal collisions and collisions involving a bicycle. Write to separate geojson files.
+    :param collisions: dictionary loaded from geojson file.
+    :return: None.
+    """
     fatal = collisions.copy()
     fatal['features'] = [collision for collision in collisions['features'] if collision['properties']['KILLED'] > 0]
     with open('fatal_collisions.geojson', 'w') as file:
@@ -37,6 +45,10 @@ def filter(collisions):
         json.dump(bicycle, file)
 
 def plot(collisions):
+    """ Plot a histogram over time and barplot of roadways.
+    :param collisions: dictionary loaded from geojson file.
+    :return: None.
+    """
     dates = list()
     roads_unfiltered = collections.defaultdict(int)
     for collision in collisions['features']:
@@ -55,9 +67,19 @@ def plot(collisions):
             name = None
         if name:
             roads_unfiltered[name] += 1
-    roads_filtered = {road: count for road, count in roads_unfiltered.items() if count >= 50}
-    plotly.offline.plot(plotly.graph_objs.Figure(data=[plotly.graph_objs.Histogram(x=dates, name='all collisions')], layout=plotly.graph_objs.Layout(title='Lexington Collisions 2004 - 2014', xaxis=dict(title='Date'), yaxis=dict(title='Count'))), filename='histogram.html')
-    plotly.offline.plot(plotly.graph_objs.Figure(data=[plotly.graph_objs.Bar(x=list(sorted(roads_filtered.keys())), y=[roads_filtered[name] for name in sorted(roads_filtered.keys())])], layout=plotly.graph_objs.Layout(title='Lexington Collisions by Roadway 2004 - 2014', xaxis=dict(title='Roadway'), yaxis=dict(title='Count'))), filename='barplot.html')
+    roads_filtered = {road: count for road, count in roads_unfiltered.items() if count >= 50}  # only include roadways with 50+ collisions
+    # plot the histogram of collisions over time
+    plotly.offline.plot(plotly.graph_objs.Figure(data=[plotly.graph_objs.Histogram(x=dates, name='all collisions')], 
+                                                 layout=plotly.graph_objs.Layout(title='Lexington Collisions 2004 - 2014', 
+                                                                                 xaxis=dict(title='Date'), 
+                                                                                 yaxis=dict(title='Count'))), 
+                        filename='histogram.html')
+    # plot the barplot of collisions on roadways
+    plotly.offline.plot(plotly.graph_objs.Figure(data=[plotly.graph_objs.Bar(x=list(sorted(roads_filtered.keys())), 
+                                                                             y=[roads_filtered[name] for name in sorted(roads_filtered.keys())])], 
+                                                 layout=plotly.graph_objs.Layout(title='Lexington Collisions by Roadway 2004 - 2014', 
+                                                                                 xaxis=dict(title='Roadway'), yaxis=dict(title='Count'))), 
+                        filename='barplot.html')
 
 if __name__ == "__main__":
     main(docopt.docopt(__doc__))
