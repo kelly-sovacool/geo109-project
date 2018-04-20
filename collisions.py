@@ -45,7 +45,7 @@ def filter(collisions):
         json.dump(bicycle, file)
 
 def plot(collisions):
-    """ Plot a histogram over time and barplot of roadways.
+    """ Plot a histogram of collisions over time and barplot of roadways with 50+ collisions.
     :param collisions: dictionary loaded from geojson file.
     :return: None.
     """
